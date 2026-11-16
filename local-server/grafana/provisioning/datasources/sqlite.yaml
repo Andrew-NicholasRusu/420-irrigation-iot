@@ -1,0 +1,9 @@
+apiVersion: 1
+datasources:
+  - name: Irrigation (SQLite)
+    uid: irrigation-sqlite
+    type: frser-sqlite-datasource
+    access: proxy
+    isDefault: true
+    jsonData:
+      path: /data/irrigation.db

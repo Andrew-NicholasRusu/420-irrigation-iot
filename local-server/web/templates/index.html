@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Irrigation Monitor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+</head>
+<body>
+<header>
+    <h1>Irrigation Monitor</h1>
+    <nav>
+        <label for="deviceSelect">Device</label>
+        <select id="deviceSelect"><option value="">All devices (averaged)</option></select>
+        <span id="deviceStatus" class="badge">device: …</span>
+        <a class="btn" href="{{ grafana_url }}" target="_blank" rel="noopener">Open Grafana</a>
+    </nav>
+</header>
+
+<main>
+    <section class="cards">
+        <div class="card temp"><h2>Temperature</h2><p id="tempValue">–</p></div>
+        <div class="card hum"><h2>Humidity</h2><p id="humValue">–</p></div>
+        <div class="card press"><h2>Water pressure</h2><p id="pressValue">–</p></div>
+        <div class="card info">
+            <h2>Store-and-forward</h2>
+            <p id="bufferedValue">–</p>
+            <small>readings in the last hour that arrived more than 60 s late (sent from the Pi's buffer)</small>
+        </div>
+    </section>
+
+    <section class="toolbar">
+        <span>History:</span>
+        <button data-min="15">15 min</button>
+        <button data-min="60" class="active">1 hour</button>
+        <button data-min="1440">24 hours</button>
+        <span id="lastUpdate" class="muted">last update: –</span>
+    </section>
+
+    <section class="charts">
+        <div class="chart-box"><canvas id="tempChart"></canvas></div>
+        <div class="chart-box"><canvas id="humChart"></canvas></div>
+        <div class="chart-box wide"><canvas id="pressChart"></canvas></div>
+    </section>
+
+    <section>
+        <h2>Recent readings</h2>
+        <table>
+            <thead>
+            <tr><th>Collected</th><th>Device</th><th>Temp (°C)</th><th>Humidity (%)</th>
+                <th>Pressure (kPa)</th><th>Delivery</th></tr>
+            </thead>
+            <tbody id="recentRows"></tbody>
+        </table>
+    </section>
+</main>
+
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

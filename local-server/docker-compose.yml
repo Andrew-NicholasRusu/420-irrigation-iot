@@ -1,0 +1,85 @@
+# Laptop side: Mosquitto + subscriber (-> SQLite) + Flask (Chart.js) + Grafana
+#   docker compose up -d --build
+#   docker compose --profile simulator up -d --build   # also start a simulated Pi
+services:
+  mosquitto:
+    image: eclipse-mosquitto:2
+    container_name: mosquitto-server
+    ports:
+      - "1883:1883"                      # the Raspberry Pi connects to <laptop IP>:1883
+    volumes:
+      - ./mosquitto/config:/mosquitto/config:ro
+      - mosquitto-data:/mosquitto/data   # keeps queued QoS 1 messages across restarts
+    restart: unless-stopped
+
+  subscriber:
+    build:
+      context: .
+      dockerfile: subscriber/Dockerfile
+    container_name: subscriber-app
+    environment:
+      MQTT_HOST: mosquitto
+      MQTT_PORT: "1883"
+      DB_PATH: /data/irrigation.db
+    volumes:
+      - ./data:/data                     # writes irrigation.db here
+    depends_on:
+      - mosquitto
+    restart: unless-stopped
+
+  web:
+    build:
+      context: .
+      dockerfile: web/Dockerfile
+    container_name: web-app
+    ports:
+      - "5000:5000"                      # http://localhost:5000
+    environment:
+      DB_PATH: /data/irrigation.db
+      GRAFANA_URL: http://localhost:3000/d/irrigation
+    volumes:
+      - ./data:/data                     # same file, read by Flask
+    depends_on:
+      - subscriber
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:latest        # pin one version for the term
+    container_name: grafana-app
+    user: "0"                            # classroom shortcut: can create SQLite WAL files in ./data
+    ports:
+      - "3000:3000"                      # http://localhost:3000  (admin / iot420)
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: iot420
+      GF_PLUGINS_PREINSTALL_SYNC: frser-sqlite-datasource
+      GF_AUTH_ANONYMOUS_ENABLED: "true"  # the Flask "Open Grafana" link works without login
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Viewer
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./data:/data                     # same file, read-only queries
+      - ./grafana/provisioning:/etc/grafana/provisioning
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
+    depends_on:
+      - subscriber
+    restart: unless-stopped
+
+  # Optional: a simulated Raspberry Pi, for testing without hardware.
+  pi-sim:
+    profiles: ["simulator"]
+    build: ../pi
+    container_name: pi-simulator
+    environment:
+      DEVICE_ID: pi5-sim
+      MQTT_HOST: mosquitto
+      PI_DB_PATH: /buffer/pi_buffer.db
+    volumes:
+      - pi-sim-buffer:/buffer
+    depends_on:
+      - mosquitto
+    restart: unless-stopped
+
+volumes:
+  mosquitto-data:
+  grafana-data:
+  pi-sim-buffer:

@@ -1,0 +1,24 @@
+# Optional: start the node automatically when the Pi boots.
+# 1. Edit User, WorkingDirectory, ExecStart and the Environment lines below.
+# 2. sudo cp irrigation-node.service /etc/systemd/system/
+# 3. sudo systemctl daemon-reload
+# 4. sudo systemctl enable --now irrigation-node
+# 5. journalctl -u irrigation-node -f        (watch the log)
+
+[Unit]
+Description=Irrigation sensor node (store-and-forward to MQTT)
+After=network-online.target time-sync.target
+Wants=network-online.target
+
+[Service]
+User=pi
+WorkingDirectory=/home/pi/irrigation-iot/pi
+Environment=DEVICE_ID=pi5-01
+Environment=MQTT_HOST=192.168.1.50
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/home/pi/irrigation-iot/pi/.venv/bin/python node.py
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

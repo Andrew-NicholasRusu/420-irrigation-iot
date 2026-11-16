@@ -1,0 +1,639 @@
+{
+  "uid": "irrigation",
+  "title": "Irrigation Monitor",
+  "tags": [
+    "iot",
+    "irrigation"
+  ],
+  "timezone": "browser",
+  "refresh": "5s",
+  "schemaVersion": 39,
+  "version": 1,
+  "editable": true,
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "templating": {
+    "list": []
+  },
+  "annotations": {
+    "list": []
+  },
+  "panels": [
+    {
+      "id": 1,
+      "type": "stat",
+      "title": "Temperature",
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "irrigation-sqlite"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 5,
+        "h": 4
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "irrigation-sqlite"
+          },
+          "queryText": "SELECT temperature AS \"Temperature\"\nFROM sensor_readings\nWHERE temperature IS NOT NULL\nORDER BY collected_at DESC, id DESC\nLIMIT 1",
+          "rawQueryText": "SELECT temperature AS \"Temperature\"\nFROM sensor_readings\nWHERE temperature IS NOT NULL\nORDER BY collected_at DESC, id DESC\nLIMIT 1",
+          "queryType": "table",
+          "timeColumns": []
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "celsius",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 15
+              },
+              {
+                "color": "yellow",
+                "value": 28
+              },
+              {
+                "color": "red",
+                "value": 32
+              }
+            ]
+          },
+          "decimals": 1
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "textMode": "value",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      }
+    },
+    {
+      "id": 2,
+      "type": "stat",
+      "title": "Humidity",
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "irrigation-sqlite"
+      },
+      "gridPos": {
+        "x": 5,
+        "y": 0,
+        "w": 5,
+        "h": 4
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "irrigation-sqlite"
+          },
+          "queryText": "SELECT humidity AS \"Humidity\"\nFROM sensor_readings\nWHERE humidity IS NOT NULL\nORDER BY collected_at DESC, id DESC\nLIMIT 1",
+          "rawQueryText": "SELECT humidity AS \"Humidity\"\nFROM sensor_readings\nWHERE humidity IS NOT NULL\nORDER BY collected_at DESC, id DESC\nLIMIT 1",
+          "queryType": "table",
+          "timeColumns": []
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "orange",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 40
+              },
+              {
+                "color": "yellow",
+                "value": 75
+              },
+              {
+                "color": "red",
+                "value": 85
+              }
+            ]
+          },
+          "decimals": 0
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "textMode": "value",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      }
+    },
+    {
+      "id": 3,
+      "type": "stat",
+      "title": "Water pressure",
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "irrigation-sqlite"
+      },
+      "gridPos": {
+        "x": 10,
+        "y": 0,
+        "w": 5,
+        "h": 4
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "irrigation-sqlite"
+          },
+          "queryText": "SELECT water_pressure AS \"Water pressure\"\nFROM sensor_readings\nWHERE water_pressure IS NOT NULL\nORDER BY collected_at DESC, id DESC\nLIMIT 1",
+          "rawQueryText": "SELECT water_pressure AS \"Water pressure\"\nFROM sensor_readings\nWHERE water_pressure IS NOT NULL\nORDER BY collected_at DESC, id DESC\nLIMIT 1",
+          "queryType": "table",
+          "timeColumns": []
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "pressurekpa",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 150
+              },
+              {
+                "color": "green",
+                "value": 200
+              },
+              {
+                "color": "red",
+                "value": 450
+              }
+            ]
+          },
+          "decimals": 0
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "textMode": "value",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      }
+    },
+    {
+      "id": 4,
+      "type": "stat",
+      "title": "Device",
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "irrigation-sqlite"
+      },
+      "gridPos": {
+        "x": 15,
+        "y": 0,
+        "w": 4,
+        "h": 4
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "irrigation-sqlite"
+          },
+          "queryText": "SELECT status AS \"Status\"\nFROM device_status\nORDER BY updated_at DESC\nLIMIT 1",
+          "rawQueryText": "SELECT status AS \"Status\"\nFROM device_status\nORDER BY updated_at DESC\nLIMIT 1",
+          "queryType": "table",
+          "timeColumns": []
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "online": {
+                  "color": "green",
+                  "index": 0,
+                  "text": "ONLINE"
+                },
+                "offline": {
+                  "color": "red",
+                  "index": 1,
+                  "text": "OFFLINE"
+                }
+              }
+            }
+          ]
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "textMode": "value",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/.*/",
+          "values": false
+        }
+      }
+    },
+    {
+      "id": 5,
+      "type": "stat",
+      "title": "Buffered readings (last hour)",
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "irrigation-sqlite"
+      },
+      "gridPos": {
+        "x": 19,
+        "y": 0,
+        "w": 5,
+        "h": 4
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "irrigation-sqlite"
+          },
+          "queryText": "SELECT COUNT(*) AS \"Buffered\"\nFROM sensor_readings\nWHERE received_at >= datetime('now', '-1 hour')\n  AND strftime('%s', received_at) - strftime('%s', collected_at) > 60",
+          "rawQueryText": "SELECT COUNT(*) AS \"Buffered\"\nFROM sensor_readings\nWHERE received_at >= datetime('now', '-1 hour')\n  AND strftime('%s', received_at) - strftime('%s', collected_at) > 60",
+          "queryType": "table",
+          "timeColumns": []
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "textMode": "value",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      }
+    },
+    {
+      "id": 6,
+      "type": "timeseries",
+      "title": "Temperature history",
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "irrigation-sqlite"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 4,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "irrigation-sqlite"
+          },
+          "queryText": "SELECT CAST(strftime('%s', collected_at) AS INTEGER) AS time, temperature AS \"Temperature\"\nFROM sensor_readings\nWHERE CAST(strftime('%s', collected_at) AS INTEGER) BETWEEN $__from / 1000 AND $__to / 1000\n  AND temperature IS NOT NULL\nORDER BY time",
+          "rawQueryText": "SELECT CAST(strftime('%s', collected_at) AS INTEGER) AS time, temperature AS \"Temperature\"\nFROM sensor_readings\nWHERE CAST(strftime('%s', collected_at) AS INTEGER) BETWEEN $__from / 1000 AND $__to / 1000\n  AND temperature IS NOT NULL\nORDER BY time",
+          "queryType": "time series",
+          "timeColumns": [
+            "time"
+          ]
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "celsius",
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 10,
+            "spanNulls": false,
+            "showPoints": "never"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      }
+    },
+    {
+      "id": 7,
+      "type": "timeseries",
+      "title": "Humidity history",
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "irrigation-sqlite"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 4,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "irrigation-sqlite"
+          },
+          "queryText": "SELECT CAST(strftime('%s', collected_at) AS INTEGER) AS time, humidity AS \"Humidity\"\nFROM sensor_readings\nWHERE CAST(strftime('%s', collected_at) AS INTEGER) BETWEEN $__from / 1000 AND $__to / 1000\n  AND humidity IS NOT NULL\nORDER BY time",
+          "rawQueryText": "SELECT CAST(strftime('%s', collected_at) AS INTEGER) AS time, humidity AS \"Humidity\"\nFROM sensor_readings\nWHERE CAST(strftime('%s', collected_at) AS INTEGER) BETWEEN $__from / 1000 AND $__to / 1000\n  AND humidity IS NOT NULL\nORDER BY time",
+          "queryType": "time series",
+          "timeColumns": [
+            "time"
+          ]
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "custom": {
+            "drawStyle": "bars",
+            "lineWidth": 1,
+            "fillOpacity": 70,
+            "spanNulls": false,
+            "showPoints": "never"
+          },
+          "min": 0,
+          "max": 100
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      }
+    },
+    {
+      "id": 8,
+      "type": "timeseries",
+      "title": "Water pressure history",
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "irrigation-sqlite"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 12,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "irrigation-sqlite"
+          },
+          "queryText": "SELECT CAST(strftime('%s', collected_at) AS INTEGER) AS time, water_pressure AS \"Water pressure\"\nFROM sensor_readings\nWHERE CAST(strftime('%s', collected_at) AS INTEGER) BETWEEN $__from / 1000 AND $__to / 1000\n  AND water_pressure IS NOT NULL\nORDER BY time",
+          "rawQueryText": "SELECT CAST(strftime('%s', collected_at) AS INTEGER) AS time, water_pressure AS \"Water pressure\"\nFROM sensor_readings\nWHERE CAST(strftime('%s', collected_at) AS INTEGER) BETWEEN $__from / 1000 AND $__to / 1000\n  AND water_pressure IS NOT NULL\nORDER BY time",
+          "queryType": "time series",
+          "timeColumns": [
+            "time"
+          ]
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "pressurekpa",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "transparent",
+                "value": 150
+              }
+            ]
+          },
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 10,
+            "spanNulls": false,
+            "showPoints": "never",
+            "thresholdsStyle": {
+              "mode": "line+area"
+            }
+          },
+          "min": 0
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      }
+    },
+    {
+      "id": 9,
+      "type": "timeseries",
+      "title": "Delivery delay (store-and-forward)",
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "irrigation-sqlite"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 12,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "irrigation-sqlite"
+          },
+          "queryText": "SELECT CAST(strftime('%s', collected_at) AS INTEGER) AS time,\n  strftime('%s', received_at) - strftime('%s', collected_at) AS \"Delay\"\nFROM sensor_readings\nWHERE CAST(strftime('%s', collected_at) AS INTEGER) BETWEEN $__from / 1000 AND $__to / 1000\nORDER BY time",
+          "rawQueryText": "SELECT CAST(strftime('%s', collected_at) AS INTEGER) AS time,\n  strftime('%s', received_at) - strftime('%s', collected_at) AS \"Delay\"\nFROM sensor_readings\nWHERE CAST(strftime('%s', collected_at) AS INTEGER) BETWEEN $__from / 1000 AND $__to / 1000\nORDER BY time",
+          "queryType": "time series",
+          "timeColumns": [
+            "time"
+          ]
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 60
+              }
+            ]
+          },
+          "custom": {
+            "drawStyle": "points",
+            "pointSize": 6,
+            "showPoints": "always",
+            "spanNulls": false,
+            "thresholdsStyle": {
+              "mode": "line"
+            }
+          },
+          "min": 0
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      }
+    },
+    {
+      "id": 10,
+      "type": "table",
+      "title": "Recent readings",
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "irrigation-sqlite"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 20,
+        "w": 24,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "irrigation-sqlite"
+          },
+          "queryText": "SELECT collected_at AS \"Collected (UTC)\", device AS \"Device\",\n       temperature AS \"Temp (°C)\", humidity AS \"Humidity (%)\",\n       water_pressure AS \"Pressure (kPa)\",\n       strftime('%s', received_at) - strftime('%s', collected_at) AS \"Delay (s)\"\nFROM sensor_readings\nORDER BY collected_at DESC, id DESC\nLIMIT 20",
+          "rawQueryText": "SELECT collected_at AS \"Collected (UTC)\", device AS \"Device\",\n       temperature AS \"Temp (°C)\", humidity AS \"Humidity (%)\",\n       water_pressure AS \"Pressure (kPa)\",\n       strftime('%s', received_at) - strftime('%s', collected_at) AS \"Delay (s)\"\nFROM sensor_readings\nORDER BY collected_at DESC, id DESC\nLIMIT 20",
+          "queryType": "table",
+          "timeColumns": []
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "options": {}
+    }
+  ]
+}

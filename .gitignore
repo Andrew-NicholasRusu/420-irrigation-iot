@@ -1,0 +1,5 @@
+__pycache__/
+*.pyc
+.venv/
+pi/pi_buffer.db*
+local/data/*.db*
