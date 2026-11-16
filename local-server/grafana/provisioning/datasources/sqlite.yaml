@@ -7,3 +7,4 @@ datasources:
     isDefault: true
     jsonData:
       path: /data/irrigation.db
+
